@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+<div class="row">
+    <div class="col-sm-12">
+        <h2>个人简历</h2>
+        <div> 
+            <div class="form-group">
+                <label>姓名</label>
+                <label id="name" class="form-control">{{p.name}}</label>
+                <img src="/static/media/{{p.ima_url}}" alt="头像" class="form-control" id="pic">
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="age">年龄</label>
+            <label id="age" class="form-control">{{p.age}}</label>
+        </div>
+        <div class="form-group">
+            <label>出生年月日</label>
+            <label id="birthday" class="form-control">{{p.birthday}}</label>
+        </div>
+        <div class="form-group">
+            <label for="identity_card">证件类型</label>
+            <label id="identity_card" class="form-control">{{p.identityCard}}</label>
+        </div>
+        <div class="form-group">
+            <label for="identity_num">证件号码</label>
+            <label id="identity_num" class="form-control">{{p.identityNum}}</label>
+        </div>
+        <div class="form-group">
+            <label for="phone">电话</label>
+            <label id="phone" class="form-control">{{p.phone}}</label>
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <label id="email" class="form-control">{{p.email}}</label>
+        </div>
+        <div class="form-group"> 
+            <h2>教育经历</h2>
+        </div>
+        {% for item in p.education_set.all %}
+        <div class="education_div">
+            <div class="form-group">
+                <label >学校</label>
+                <label class="form-control school">{{item.school}}</label>
+            </div>
+            <div class="form-group">
+                <label>详细信息</label>
+                <label class="form-control education_info">{{item.educationTitle}}</label>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-group"> 
+            <h2>工作经历</h2>
+        </div>
+        {% for item in p.work_set.all %}
+        <div class="experience_div">
+            <div class="form-group"> 
+                <label>开始时间</label>
+                <label class="form-control worktime_start">{{item.workTimeStart}}</label>
+                <label >结束时间</label>     
+                <label class="form-control worktime_end">{{item.workTimeEnd}}</label>
+            </div>
+            <div class="form-group">
+                <label >工作单位</label>
+                <label class="form-control company">{{item.workUnit}}</label>
+            </div>
+            <div class="form-group">
+                <label >详细信息</label>
+                <label class="form-control company_info">{{item.workTitle}}</label>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-group">
+                <label for="other_info">其他</label>
+                <label id="other_info"  class="form-control">{{p.other}}</label>
+        </div>
+        <a class="btn btn-info" href="/edit_{{p.id}}/">修改</a>
+    </div>
+    </div>
+</div>
+{% endblock body %}

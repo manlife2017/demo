@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <h1>简历列表 <span class="label label-default">{{paginator.count}}</span><a class="btn btn-info" id="add" href="/create_page/">新建</a></h1>
+    <div class="row">
+        {% for item in page.object_list %}
+        <div class="col-sm-offset-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="/show_information_{{item.id}}/" class="btn btn-link">{{item.name}}</a>
+                    <span class="label label-info ">{{item.email}}</span>
+                    <span class="label label-default">{{item.ctime}}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="nav" class="row">
+        <nav class="col-sm-offset-4 col-sm-4">
+            <ul class="pagination">
+                {% if page.has_previous %}
+                <li>
+                <a href="/list_page_{{ page.previous_page_number}}/" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                </li>
+                {% endif %}
+                {% for index in paginator.page_range %}
+                <li><a href="/list_page_{{index}}/">{{index}}</a></li>
+                {% endfor %}
+                {% if page.has_next %}
+                <li>
+                <a href="/list_page_{{ page.next_page_number}}/" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock body %}

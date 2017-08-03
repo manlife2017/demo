@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block header %}
+    <script>
+ $(function(){
+                $('#add_education').click(function(){
+                if($('.education_div').length<=5){
+                    $(this).parent().after('<div class="education_div"><div class="form-group"><a class="form-control btn btn-info del_education" >删除</a></div><div class="form-group"><label >学校</label><input type="text" class="form-control school"></div><div class="form-group"><label>详细信息</label><textarea class="form-control education_info"  rows="3"></textarea></div></div>')
+                    $('.del_education').click(function(){
+                        if($('.education_div').length>0){
+                             $(this).parents('.education_div').remove()
+                        }
+                     })
+                }
+                else{
+                    alert('最多五个')
+                }
+            })
+            $('#add_work').click(function(){
+                if($('.experience_div').length<=5){
+                    $(this).parent().after('<div class="experience_div"><div class="form-group"><a class="form-control btn btn-info del_experience" >删除</a></div><div class="form-group"><label>开始时间</label><input type="date" class="form-control worktime_start"  name="worktime_start"> <label >结束时间</label><input type="date" class="form-control worktime_end" name="worktime_end"></div><div class="form-group"><label >工作单位</label><input type="text"  class="form-control company"></div><div class="form-group"><label >详细信息</label><textarea class="form-control company_info" rows="3" ></textarea></div></div>')
+                    $('.del_experience').each(function(){
+                        $(this).click(function(){
+                        if($('.experience_div').length>0){
+                            $(this).parents('.experience_div').remove()
+                        }
+                        })
+                    })
+                }
+                else{
+                    alert('最多五个')
+                }
+            })
+
+
+            //要用时间冒泡解决
+
+            // 教育删除
+            $('.del_education').click(function(){
+                if($('.education_div').length>0){
+                    $(this).parents('.education_div').remove()
+                }
+            })
+
+
+            // 经历删除
+            $('.del_experience').each(function(){
+                $(this).click(function(){
+                if($('.experience_div').length>0){
+                    $(this).parents('.experience_div').remove()
+                }
+                })
+            })
+
+
+            //  图片显示 （这个代码非自己写的百度的）
+            function setImagePreview() {
+                var docObj=document.getElementById("image");
+
+                var imgObjPreview=document.getElementById("pic");
+                if(docObj.files &&    docObj.files[0]){
+                        //火狐下，直接设img属性
+                       //imgObjPreview.style.display = 'block';
+                        //imgObjPreview.style.width = '300px';
+                        //imgObjPreview.style.height = '120px';
+                        //imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+                    //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+                    imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+
+                }else{
+                        //IE下，使用滤镜
+                        docObj.select();
+                        var imgSrc = document.selection.createRange().text;
+                        var localImagId = document.getElementById("localImag");
+                        //必须设置初始大小
+                        //localImagId.style.width = "300px";
+                        //localImagId.style.height = "120px";
+                        //图片异常的捕捉，防止用户修改后缀来伪造图片
+                        try{
+                                localImagId.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                                localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+                        }catch(e){
+                                alert("您上传的图片格式不正确，请重新选择!");
+                                return false;
+                        }
+                        imgObjPreview.style.display = 'none';
+                        document.selection.empty();
+                    }
+                return true;
+            }
+            $('#image').change(function(){
+                setImagePreview()
+            })
+            //判断必填内容是否填写
+            $('#dataform').submit(function(){
+                var name_error = false;
+                var age_error = false;
+                var identity_num_error = false;
+                //name判断
+                if($('#name').val() == ''){
+                    $('#name').parent().addClass('has-error')
+                    $('#name').prop('placeholder', '请输入姓名')
+                    name_error = true
+                }
+                else{
+                    $('#name').parent().removeClass('has-error')
+                    name_error = false
+                }
+                if($('#age').val() == ''){
+                    $('#age').parent().addClass('has-error')
+                    $('#age').prop('placeholder', '请输入年龄')
+                    age_error = false;
+                }
+                else{
+                    $('#age').parent().removeClass('has-error')
+                    age_error = true
+                }
+                if($('#identity_num').val() == ''){
+                    $('#identity_num').parent().addClass('has-error')
+                    $('#identity_num').prop('placeholder', '请输入手机号')
+                    identity_num_error = false;
+                }
+                else{
+                    $('#identity_num').parent().removeClass('has-error')
+                    identity_num_error = true
+                }
+//                return false;
+            })
+
+        })
+    </script>
+{% endblock header%}
+{% block body %}
+<div class="container">
+<div class="row">
+    <div class="col-sm-12">
+    <form method="post" enctype="multipart/form-data" action="/create_info/" id="dataform">
+        {% csrf_token %}
+        <h2>个人简历要求</h2>  
+        <div> 
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" placeholder="name" name="name" class="form-control">
+                <input type="file" id="image" name="image">
+                <img src="../static/image/my.jpg" alt="头像" class="form-control" id="pic">
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="age">年龄</label>
+            <input type="text" class="form-control" id="age" placeholder="age" name="age">
+        </div>
+        <div class="form-group">
+            <label>出生年月日</label>
+            <input type="date" class="form-control" id="birthday"  name="birthday">
+        </div>
+        <div class="form-group">
+            <label for="identity_card">证件类型</label>
+            <select id="identity_card" name="identity_card" class="form-control" >
+                <option value="1">身份证</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="identity_num">证件号码</label>
+            <input type="text" id="identity_num" class="form-control" name="identity_num">
+        </div>
+        <div class="form-group">
+            <label for="phone">电话</label>
+            <input type="tel" id="phone" class="form-control" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" id="email" class="form-control" name="email">
+        </div>
+        <div class="form-group"> 
+            <h2>教育经历</h2>
+            <input type="button" class="form-control btn btn-info"  value = '添加简历' id="add_education">
+        </div>
+        <div class="education_div">
+            <div class="form-group">
+                <a class="form-control btn btn-info del_education" >删除</a>
+            </div>
+            <div class="form-group">
+                <label >学校</label>
+                <input type="text" class="form-control school" name="school">
+            </div>
+            <div class="form-group">
+                <label>详细信息</label>
+                <textarea class="form-control education_info"  rows="3" name="education_inof"></textarea>
+            </div>
+        </div>
+        <div class="form-group"> 
+            <h2>工作经历</h2>
+            <input type="button" class="form-control btn btn-info"  value = '添加简历' id="add_work">
+        </div>
+        <div class="experience_div">
+            <div class="form-group">
+                <a class="form-control btn btn-info del_experience" >删除</a>
+            </div>
+
+            <div class="form-group"> 
+                <label>开始时间</label>
+                <input type="date" class="form-control worktime_start"  name="worktime_start"> 
+                <label >结束时间</label>      
+                <input type="date" class="form-control worktime_end" name="worktime_end">       
+            </div>
+            <div class="form-group">
+                <label >工作单位</label>
+                <input type="text"  class="form-control company" name="company">
+            </div>
+            <div class="form-group">
+                <label >详细信息</label>
+                <textarea class="form-control company_info" rows="3"  name="company_info" ></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+                <label for="other_info">其他</label>
+                <textarea class="form-control" rows="3" id="other_info" name="other_info"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+    </div>
+    </div>
+</div>
+{% endblock body%}

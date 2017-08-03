@@ -1,0 +1,39 @@
+/* 编辑页面样式 */
+#name,#age,#birthday,#identity_card,#identity_num,#phone,#email,.school,.company{
+    display:inline;
+    width:30%;
+    margin-left:2rem;
+}
+#pic{
+    height: 12rem;
+    width: 24%;
+    display: inline;
+    margin-left: 1rem;
+}
+#image{
+    display: inline;
+    width:25%;
+}
+.form-group>.company_info,.form-group>.education_info,#other_info{
+    resize: none;
+    overflow-y: scroll;
+    height: 10rem;
+}
+.form-group>.worktime_end,.form-group>.worktime_start{
+    display:inline;
+    width:20%;
+    margin-left:2rem;
+    margin-right:2rem;
+}
+#add_work,#add_education,.experience_div .del_experience,.education_div .del_education,#save_work{
+    display:inline;
+    width:10%;
+}
+#nav .pagination{
+    width: 100%;
+    margin: 0 auto;
+}
+#add{
+    float: right;
+    width: 13%;
+}
